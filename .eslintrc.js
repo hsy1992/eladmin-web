@@ -193,6 +193,8 @@ module.exports = {
     'object-curly-spacing': [2, 'always', {
       objectsInObjects: false
     }],
-    'array-bracket-spacing': [2, 'never']
+    'array-bracket-spacing': [2, 'never'],
+    "vue/no-unused-components": "off", // 当存在定义而未使用的组件时，关闭报错
+    "no-unused-vars":"off" // 当存在定义而未使用的变量时，关闭报错
   }
 }

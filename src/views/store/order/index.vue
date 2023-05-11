@@ -74,7 +74,6 @@
         <el-table-column prop="payType" label="支付方式" />
         <el-table-column prop="status" label="-1申请退款 -2 退款成功 0 待发货 1待收货 2 已收货 3已完成" />
         <el-table-column prop="remark" label="备注" />
-        <el-table-column prop="isDel" label="isDel" />
         <el-table-column prop="shippingType" label="1配送 2 自提" />
         <el-table-column prop="wxId" label="微信订单id" />
         <el-table-column v-if="checkPer(['admin','tsStoreOrder:edit','tsStoreOrder:del'])" label="操作" width="150px" align="center">

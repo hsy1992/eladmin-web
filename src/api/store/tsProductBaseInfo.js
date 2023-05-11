@@ -24,4 +24,15 @@ export function edit(data) {
   })
 }
 
-export default { add, edit, del }
+/**
+ * 查询分类
+ */
+export function listClassify(data) {
+  return request({
+    url: '/api/tsProductClassify/list',
+    method: 'get',
+    data
+  })
+}
+
+export default { add, edit, del, listClassify }

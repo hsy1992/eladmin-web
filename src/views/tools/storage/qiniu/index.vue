@@ -22,8 +22,7 @@
             size="mini"
             type="success"
             icon="el-icon-s-tools"
-            @click="doConfig"
-          >配置</el-button>
+            @click="doConfig">配置</el-button>
         </template>
       </crudOperation>
       <!-- 文件上传 -->

@@ -6,15 +6,25 @@
       <crudOperation :permission="permission" />
       <el-button type="primary" round @click="dialogVisible = true">快速添加</el-button>
       <el-dialog title="快速添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
-        <el-tabs :tab-position="right" style="height: 200px;">
-          <el-tab-pane label="用户管理">用户管理</el-tab-pane>
-          <el-tab-pane label="配置管理">配置管理</el-tab-pane>
-          <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-          <el-tab-pane label="定时任务补偿">定时任务补偿1123123</el-tab-pane>
+        <el-tabs :tab-position="'left'" style="height: 500px;" v-model="currentCateIndex" :before-leave="clearData">
+          <el-tab-pane v-for="item in classifyList" :label="item.cateName" :key="item.cateId">
+            <!--表格渲染-->
+            <el-input v-model="searchText" clearable size="small" placeholder="输入商品名称" style="width: 200px;"
+              class="filter-item" @keyup.enter.native="crud.toQuery" />
+            <el-button class="filter-item" size="mini" type="success" icon="el-icon-search"
+              @click="searchProduct">搜索</el-button>
+            <el-table ref="table" :data="searchProductList" size="small" style="width: 100%; height:400px; overflow:auto"
+              @selection-change="selectionChangeHandler">
+              <el-table-column type="selection" width="55" />
+              <el-table-column prop="code" label="商品条码(必填)" />
+              <el-table-column prop="name" label="商品名称(必填)" />
+              <el-table-column prop="salesPrice" label="销售价" />
+            </el-table>
+          </el-tab-pane>
         </el-tabs>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="addProduct">确 定</el-button>
         </span>
       </el-dialog>
       <!--表单组件-->
@@ -109,7 +119,8 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 import { getToken } from '@/utils/auth'
-
+import request from '@/utils/request'
+import { Notification } from 'element-ui'
 const defaultForm = {
   image: null, name: null, info: null, barCode: null,
   keyword: null, cateId: null, price: null, sort: null, isShow: true, description: null, ficti: null, sales: null, storeId: null, cateName: null
@@ -133,6 +144,11 @@ export default {
       headers: { 'Authorization': getToken() },
       classifyList: [],
       dialogVisible: false,
+      tabPosition: "left",
+      searchProductList: [],
+      searchText: "",
+      currentCateIndex: 0,
+      selections: [],
     }
   },
   computed: {
@@ -171,6 +187,59 @@ export default {
     // 上传图片
     handleSuccess(response, file) {
       this.form.image = file.response.data[0]
+    },
+    // 搜索
+    searchProduct() {
+      var flag = this
+      var requestData = { "name": flag.searchText, "cateName": flag.classifyList[flag.currentCateIndex].cateName }
+      console.log(requestData)
+      request.post('/api/tsProductBaseInfo/byName', requestData)
+        .then(function (response) {
+          flag.searchProductList = response
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
+    //快速添加关闭
+    handleClose() {
+      request.post('/api/tsProductBaseInfo/byName', requestData)
+        .then(function (response) {
+          flag.searchProductList = response
+
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
+    // 选择改变
+    selectionChangeHandler(val) {
+      this.selections = val
+    },
+    // 添加商品
+    addProduct() {
+      console.log(this.selections)
+      if (this.selections.length == 0) {
+        Notification.error({
+          title: "请选择商品",
+          duration: 1000
+        })
+      } else {
+        request.post('/api/tsProduct/insertList', this.selections)
+          .then(function (response) {
+            flag.searchProductList = response
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+      }
+    },
+    clearData() {
+      this.searchText = ""
+      this.searchProductList = []
+      return true
     },
   },
   mounted() {

@@ -35,4 +35,16 @@ export function listClassify(data) {
   })
 }
 
-export default { add, edit, del, listClassify }
+/**
+ * 查询商品
+ */
+export function searchProduct(data) {
+  console.log(data)
+  return request({
+    url: 'api/tsProductBaseInfo/byName',
+    method: 'post',
+    data
+  })
+}
+
+export default { add, edit, del, listClassify, searchProduct }

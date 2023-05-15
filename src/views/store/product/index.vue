@@ -4,6 +4,16 @@
     <div class="head-container">
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
+      <div>
+        <!-- 搜索 -->
+        <el-input v-model="query.blurry" clearable size="small" placeholder="输入名称或者描述搜索" style="width: 200px;"
+          class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-select v-model="crud.query.cateId" filterable placeholder="请选择">
+          <el-option v-for="item in classifyList" :key="item.id" :label="item.cateName" :value="item.id">
+          </el-option>
+        </el-select>
+        <rrOperation />
+      </div>
       <el-button type="primary" round @click="dialogVisible = true">快速添加</el-button>
       <el-dialog title="快速添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
         <el-tabs :tab-position="'left'" style="height: 500px;" v-model="currentCateIndex" :before-leave="clearData">
@@ -77,6 +87,7 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
         </div>
       </el-dialog>
+
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;"
         @selection-change="crud.selectionChangeHandler">
@@ -226,10 +237,17 @@ export default {
           duration: 1000
         })
       } else {
+        var flag = this
+        this.selections.forEach(e => {
+          e["cateId"] = flag.classifyList[flag.currentCateIndex].id
+        })
         request.post('/api/tsProduct/insertList', this.selections)
           .then(function (response) {
-            flag.searchProductList = response
-
+            Notification.success({
+              title: "添加成功",
+              duration: 1000
+            })
+            clearData()
           })
           .catch(function (error) {
             console.log(error);
@@ -239,6 +257,7 @@ export default {
     clearData() {
       this.searchText = ""
       this.searchProductList = []
+      this.selections = []
       return true
     },
   },

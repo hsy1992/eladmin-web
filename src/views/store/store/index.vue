@@ -126,7 +126,7 @@ export default {
   components: { pagination, crudOperation, rrOperation, udOperation, BMapAddressSelect },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: '仓买', url: 'api/tsStore', idField: 'id', sort: 'id,desc', crudMethod: { ...crudTsStore} })
+    return CRUD({ title: '仓买', url: 'api/tsStore', idField: 'id', sort: 'id,desc', crudMethod: { ...crudTsStore } })
   },
   data() {
     return {

@@ -7,9 +7,6 @@
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-          <el-form-item label="订单号">
-            <el-input v-model="form.code" style="width: 370px;" />
-          </el-form-item>
           <el-form-item label="用户名">
             <el-input v-model="form.realName" style="width: 370px;" />
           </el-form-item>
@@ -30,9 +27,6 @@
           </el-form-item>
           <el-form-item label="支付金额">
             <el-input v-model="form.payPrice" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="支付状态">
-            <el-input v-model="form.paid" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="支付方式">
             <el-input v-model="form.payType" style="width: 370px;" />
@@ -61,7 +55,6 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="code" label="订单号" />
         <el-table-column prop="realName" label="用户名" />
         <el-table-column prop="userPhone" label="用户电话" />
         <el-table-column prop="userAddress" label="用户地址" />
@@ -69,7 +62,6 @@
         <el-table-column prop="totalNum" label="商品总数" />
         <el-table-column prop="totalPrice" label="订单总价" />
         <el-table-column prop="payPrice" label="支付金额" />
-        <el-table-column prop="paid" label="支付状态" />
         <el-table-column prop="payTime" label="支付时间" />
         <el-table-column prop="payType" label="支付方式" />
         <el-table-column prop="status" label="-1申请退款 -2 退款成功 0 待发货 1待收货 2 已收货 3已完成" />

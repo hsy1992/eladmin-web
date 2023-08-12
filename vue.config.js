@@ -61,7 +61,10 @@ module.exports = {
         algorithm: 'gzip', // 使用gzip压缩
         minRatio: 0.8 // 压缩率小于1才会压缩
       })
-    ]
+    ],
+    externals: {
+      BMap: 'BMap',
+    },
   },
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test
@@ -108,7 +111,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()
